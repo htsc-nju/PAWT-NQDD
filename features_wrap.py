@@ -47,8 +47,6 @@ class Feature_Wraper:
 
     def data2prices(self, df):
         price = df.tail(1)["close"].values
-        print(type(price))
-        print(price)
         return price
 
     def data2feature(self, df, time):
@@ -57,13 +55,14 @@ class Feature_Wraper:
             add some feature progress here
         '''
         np_ndarray[:, 0] = 1
-        np_ndarray = np_ndarray / np_ndarray.max(axis=0)
+        np_ndarray = np_ndarray / (np_ndarray.max(axis=0)+0.0001)
         for i in range(WINDOW_SIZE):
             np_ndarray[i][0] = time - WINDOW_SIZE + 1 + i
-        return np_ndarray
+        return np_ndarray.astype(float)
 
 
 if __name__ == "__main__":
-    fw = Feature_Wraper("data/1min.csv")
+    fw = Feature_Wraper("data/XSHE_2015_2018.csv")
     print(fw.prices[0])
-    print(len(fw.time_id)==len(fw.features)==len(fw.prices))
+    print(fw.prices[-1])
+    print(len(fw.time_id) == len(fw.features) == len(fw.prices))
